@@ -1,36 +1,93 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Galaxtc Grimoire Portfolio
+
+An interactive spell book / grimoire portfolio website for Galaxtc cosmic art.
+
+## Features
+
+- **Interactive Page-Flip**: Realistic book page turning animations using StPageFlip
+- **Animated Space Background**: Dynamic starfield with twinkling stars and moving nebulae
+- **Parchment Textures**: Authentic old book feel with aged parchment pages
+- **Leather Cover**: Detailed grimoire cover with metal corner decorations
+- **Magic Particles**: Floating golden dust particles for atmosphere
+- **Blacklight Toggle**: Some artworks can be viewed in UV blacklight mode
+- **Responsive Design**: Works on desktop, tablet, and mobile
+- **Keyboard Navigation**: Arrow keys to flip pages
+
+## Tech Stack
+
+- **Framework**: Next.js 15 with App Router
+- **Styling**: Tailwind CSS + Custom CSS
+- **Page Flip**: page-flip (StPageFlip)
+- **Fonts**: Google Fonts (Cinzel, Cinzel Decorative, Crimson Text)
+- **Deployment**: Vercel-ready
 
 ## Getting Started
 
-First, run the development server:
-
 ```bash
+# Install dependencies
+npm install
+
+# Run development server
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+
+# Build for production
+npm run build
+
+# Start production server
+npm run start
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Adding New Artwork
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+1. Add the image to `/public/artwork/`
+2. Edit `/data/artworks.ts` and add a new entry:
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```typescript
+{
+  id: "unique-id",
+  title: "Artwork Title",
+  image: "/artwork/your-image.jpg",
+  technique: "Acrylic on canvas",
+  size: "40x50 cm",  // optional
+  description: "Description of the artwork...",
+  hasBlacklight: false,  // set to true if there's a UV version
+  blacklightImage: "/artwork/uv-version.jpg",  // if hasBlacklight is true
+}
+```
 
-## Learn More
+## File Structure
 
-To learn more about Next.js, take a look at the following resources:
+```
+galaxtc-website/
+├── app/
+│   ├── globals.css      # All styling including grimoire theme
+│   ├── layout.tsx       # Root layout with fonts
+│   └── page.tsx         # Main page component
+├── components/
+│   ├── GrimoireBook.tsx # Main book component with page-flip
+│   └── SpaceBackground.tsx # Animated starfield canvas
+├── data/
+│   └── artworks.ts      # Artwork data (images, titles, descriptions)
+└── public/
+    └── artwork/         # Artwork images and logo
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Customization
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+### Colors
+Edit the CSS variables in `globals.css`:
+- `--parchment-*`: Page colors
+- `--leather-*`: Cover colors
+- `--metal-*`: Metal decoration colors
+- `--ink-*`: Text colors
 
-## Deploy on Vercel
+### Book Size
+Adjust in `GrimoireBook.tsx`:
+```typescript
+const width = isMobile ? 300 : 450;
+const height = isMobile ? 420 : 600;
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## License
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+All artwork copyright Galaxtc. Website code can be adapted for personal portfolios.

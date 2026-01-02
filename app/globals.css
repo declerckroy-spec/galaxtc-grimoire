@@ -1,26 +1,1304 @@
 @import "tailwindcss";
 
+/* ============================================
+   GALAXTC GRIMOIRE - REFINED STYLES V2
+   ============================================ */
+
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --parchment-base: #f5e6c8;
+  --parchment-light: #faf3e3;
+  --parchment-dark: #e8d5b0;
+  --parchment-stain: #d4c4a1;
+  --parchment-shadow: #c4b08a;
+
+  --leather-darkest: #1a0f08;
+  --leather-dark: #2d1810;
+  --leather-mid: #3d2418;
+  --leather-light: #4a2f20;
+  --leather-highlight: #5c3a28;
+
+  --metal-dark: #5a4a14;
+  --metal-bronze: #8b6914;
+  --metal-copper: #a67c3d;
+  --metal-gold: #c9a227;
+  --metal-shine: #e8c84a;
+
+  --ink-dark: #1a1208;
+  --ink-mid: #2d1f0f;
+  --ink-light: #4a3a24;
+  --ink-faded: #6b5a44;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+* {
+  box-sizing: border-box;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+html, body {
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+  background: #030308;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: "Crimson Text", Georgia, "Times New Roman", serif;
+  color: var(--ink-dark);
+  min-height: 100vh;
+}
+
+/* ============================================
+   GRIMOIRE CONTAINER
+   ============================================ */
+
+.grimoire-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  padding: 1rem;
+  position: relative;
+}
+
+/* ============================================
+   MAGIC PARTICLES - More refined
+   ============================================ */
+
+.magic-particles {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+  z-index: 1;
+}
+
+.particle {
+  position: absolute;
+  width: 2px;
+  height: 2px;
+  background: radial-gradient(circle, rgba(212, 175, 55, 0.9) 0%, rgba(212, 175, 55, 0.3) 50%, transparent 70%);
+  border-radius: 50%;
+  animation: float-particle linear infinite;
+  opacity: 0;
+  filter: blur(0.5px);
+}
+
+.particle:nth-child(odd) {
+  width: 3px;
+  height: 3px;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.8) 0%, rgba(212, 175, 55, 0.4) 50%, transparent 70%);
+}
+
+@keyframes float-particle {
+  0% {
+    transform: translateY(100vh) rotate(0deg) scale(0);
+    opacity: 0;
+  }
+  10% {
+    opacity: 0.8;
+    transform: translateY(90vh) rotate(72deg) scale(1);
+  }
+  90% {
+    opacity: 0.6;
+  }
+  100% {
+    transform: translateY(-10vh) rotate(720deg) scale(0.5);
+    opacity: 0;
+  }
+}
+
+/* ============================================
+   BOOK WRAPPER - Larger size
+   ============================================ */
+
+.book-wrapper {
+  perspective: 2500px;
+  position: relative;
+  z-index: 10;
+  transform-style: preserve-3d;
+}
+
+.grimoire-book {
+  position: relative;
+  transform-style: preserve-3d;
+  filter: drop-shadow(0 30px 60px rgba(0, 0, 0, 0.5));
+}
+
+/* ============================================
+   PAGE BASE STYLES
+   ============================================ */
+
+.page {
+  background: var(--parchment-base);
+  overflow: hidden;
+}
+
+.page-cover {
+  background: var(--leather-dark) !important;
+}
+
+/* ============================================
+   PAGE-FLIP ANIMATIE - Stijver perkament effect
+   ============================================ */
+
+/* Pagina's tijdens het flippen - behoud textuur */
+.stf__item {
+  /* Zorg dat textuur zichtbaar blijft */
+  transform-style: preserve-3d;
+  backface-visibility: hidden;
+}
+
+/* Minder buiging - stijver papier */
+.stf__block {
+  /* Subtielere schaduw tijdens flip */
+  filter: none;
+}
+
+/* De pagina zelf tijdens animatie */
+.stf__item .page {
+  /* Behoud de perkament look */
+  background: var(--parchment-base) !important;
+}
+
+/* Hard cover blijft hard */
+.stf__hardShadow,
+.stf__hardInnerShadow {
+  opacity: 0.25 !important;
+}
+
+/* Zachtere page corner shadows */
+.stf__outerShadow {
+  opacity: 0.15 !important;
+}
+
+/* Binnenste schaduw van de flip */
+.stf__innerShadow {
+  opacity: 0.2 !important;
+}
+
+/* ============================================
+   REFINED COVER STYLES
+   ============================================ */
+
+.cover-content {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: var(--leather-dark);
+  overflow: hidden;
+}
+
+/* Real leather texture image overlay */
+.cover-texture {
+  position: absolute;
+  inset: 0;
+  background: url("/textures/leather-texture.jpg") center/cover;
+  filter: brightness(0.25) saturate(0.7) contrast(1.2) sepia(0.3);
+  pointer-events: none;
+}
+
+/* Overlay for uneven aging and stains */
+.cover-texture::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    /* Dark stains and water damage */
+    radial-gradient(ellipse 40% 30% at 15% 85%, rgba(20, 10, 5, 0.6) 0%, transparent 70%),
+    radial-gradient(ellipse 25% 35% at 80% 20%, rgba(30, 15, 8, 0.5) 0%, transparent 60%),
+    radial-gradient(ellipse 50% 25% at 50% 95%, rgba(15, 8, 3, 0.7) 0%, transparent 80%),
+    /* Lighter worn areas where hands would grip */
+    radial-gradient(ellipse 20% 40% at 5% 50%, rgba(80, 50, 30, 0.3) 0%, transparent 70%),
+    radial-gradient(ellipse 20% 40% at 95% 50%, rgba(80, 50, 30, 0.3) 0%, transparent 70%),
+    /* Age spots and discoloration */
+    radial-gradient(circle at 30% 40%, rgba(60, 35, 15, 0.2) 0%, transparent 15%),
+    radial-gradient(circle at 70% 60%, rgba(50, 30, 10, 0.25) 0%, transparent 12%),
+    radial-gradient(circle at 25% 70%, rgba(45, 25, 12, 0.2) 0%, transparent 10%);
+  pointer-events: none;
+}
+
+/* Cracked and worn edges */
+.cover-texture::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    /* Heavy vignette for aged look */
+    radial-gradient(ellipse 85% 80% at center, transparent 40%, rgba(10, 5, 2, 0.8) 100%),
+    /* Worn corners */
+    radial-gradient(circle at 0% 0%, rgba(60, 40, 20, 0.4) 0%, transparent 20%),
+    radial-gradient(circle at 100% 0%, rgba(55, 35, 18, 0.35) 0%, transparent 18%),
+    radial-gradient(circle at 0% 100%, rgba(65, 42, 22, 0.45) 0%, transparent 22%),
+    radial-gradient(circle at 100% 100%, rgba(58, 38, 20, 0.4) 0%, transparent 19%);
+  pointer-events: none;
+}
+
+.front-cover {
+  border-right: 14px solid var(--leather-darkest);
+  box-shadow:
+    inset 0 0 100px rgba(0, 0, 0, 0.7),
+    inset -10px 0 40px rgba(0, 0, 0, 0.5),
+    0 10px 50px rgba(0, 0, 0, 0.6),
+    0 20px 80px rgba(0, 0, 0, 0.4);
+}
+
+.back-cover {
+  border-left: 14px solid var(--leather-darkest);
+  box-shadow:
+    inset 0 0 100px rgba(0, 0, 0, 0.7),
+    inset 10px 0 40px rgba(0, 0, 0, 0.5),
+    0 10px 50px rgba(0, 0, 0, 0.6),
+    0 20px 80px rgba(0, 0, 0, 0.4);
+}
+
+/* Decorative border on cover */
+/* Decorative border - aged, worn brass inlay */
+.cover-border {
+  position: absolute;
+  inset: 22px;
+  /* Tarnished brass border - not shiny gold */
+  border: 2px solid #5a4a35;
+  opacity: 0.5;
+  pointer-events: none;
+  box-shadow:
+    inset 0 0 4px rgba(0, 0, 0, 0.3),
+    0 0 2px rgba(0, 0, 0, 0.2);
+}
+
+.cover-border::before {
+  content: "";
+  position: absolute;
+  inset: 8px;
+  border: 1px solid #4a3a28;
+  opacity: 0.35;
+}
+
+/* Metal corners - photo-realistic with embossing */
+/* ANTIQUE HAMMERED BRONZE CORNERS with patina */
+.cover-corners .corner {
+  position: absolute;
+  width: 80px;
+  height: 80px;
+  z-index: 5;
+}
+
+/* Main corner plate - hammered bronze base */
+.corner::before {
+  content: "";
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  /* Aged bronze base - NOT shiny gold */
+  background:
+    /* Hammered texture simulation */
+    radial-gradient(circle at 20% 30%, rgba(90, 70, 45, 0.8) 0%, transparent 8%),
+    radial-gradient(circle at 60% 20%, rgba(75, 55, 35, 0.7) 0%, transparent 10%),
+    radial-gradient(circle at 35% 70%, rgba(85, 65, 40, 0.6) 0%, transparent 9%),
+    radial-gradient(circle at 80% 60%, rgba(70, 50, 30, 0.7) 0%, transparent 7%),
+    radial-gradient(circle at 15% 85%, rgba(95, 75, 50, 0.5) 0%, transparent 11%),
+    /* Green patina spots */
+    radial-gradient(circle at 25% 45%, rgba(60, 85, 65, 0.4) 0%, transparent 15%),
+    radial-gradient(circle at 70% 35%, rgba(55, 80, 60, 0.35) 0%, transparent 12%),
+    radial-gradient(circle at 50% 80%, rgba(65, 90, 70, 0.3) 0%, transparent 18%),
+    /* Base bronze gradient */
+    linear-gradient(145deg,
+      #6d5a3a 0%,
+      #5a4a2e 20%,
+      #4a3a22 40%,
+      #3d2f1a 60%,
+      #4a3a22 80%,
+      #5a4a2e 100%);
+  clip-path: polygon(0 0, 100% 0, 100% 32%, 32% 100%, 0 100%);
+  box-shadow:
+    /* Deep embossing */
+    inset 2px 2px 6px rgba(120, 100, 70, 0.4),
+    inset -3px -3px 8px rgba(0, 0, 0, 0.7),
+    /* Raised edge highlight */
+    inset 0 1px 0 rgba(140, 120, 80, 0.3),
+    /* Drop shadow */
+    4px 4px 12px rgba(0, 0, 0, 0.8),
+    2px 2px 4px rgba(0, 0, 0, 0.6);
+  filter: contrast(1.15) saturate(0.85);
+}
+
+/* Decorative rivet/boss - aged brass with wear */
+.corner::after {
+  content: "";
+  position: absolute;
+  width: 22px;
+  height: 22px;
+  background:
+    /* Scratches and wear marks */
+    linear-gradient(45deg, transparent 40%, rgba(90, 75, 50, 0.3) 45%, transparent 50%),
+    linear-gradient(-30deg, transparent 30%, rgba(100, 85, 60, 0.2) 35%, transparent 40%),
+    /* Patina spots on rivet */
+    radial-gradient(circle at 30% 70%, rgba(55, 75, 55, 0.4) 0%, transparent 40%),
+    /* Aged brass base */
+    radial-gradient(circle at 30% 30%,
+      #7a6a4a 0%,
+      #5d4d35 35%,
+      #4a3d28 60%,
+      #3a3020 100%);
+  border-radius: 50%;
+  top: 12px;
+  left: 12px;
+  box-shadow:
+    /* Dome shape */
+    inset 1px 1px 3px rgba(110, 95, 65, 0.5),
+    inset -2px -2px 4px rgba(0, 0, 0, 0.6),
+    /* Mounting shadow */
+    0 2px 4px rgba(0, 0, 0, 0.7),
+    0 1px 1px rgba(0, 0, 0, 0.5);
+}
+
+/* Slightly different positioning for aged, imperfect look */
+.corner.top-left { top: 10px; left: 10px; }
+.corner.top-right { top: 9px; right: 11px; transform: rotate(90deg); }
+.corner.bottom-left { bottom: 11px; left: 9px; transform: rotate(-90deg); }
+.corner.bottom-right { bottom: 10px; right: 10px; transform: rotate(180deg); }
+
+/* ANTIQUE MEDALLION - aged brass with heavy patina and wear */
+.cover-medallion {
+  width: 180px;
+  height: 180px;
+  border-radius: 50%;
+  /* Aged, tarnished brass - NOT shiny gold */
+  background:
+    /* Hammered/beaten texture */
+    radial-gradient(circle at 25% 20%, rgba(85, 75, 55, 0.6) 0%, transparent 12%),
+    radial-gradient(circle at 65% 30%, rgba(75, 65, 45, 0.5) 0%, transparent 15%),
+    radial-gradient(circle at 40% 60%, rgba(90, 80, 60, 0.4) 0%, transparent 10%),
+    radial-gradient(circle at 75% 70%, rgba(70, 60, 40, 0.5) 0%, transparent 14%),
+    radial-gradient(circle at 30% 80%, rgba(80, 70, 50, 0.45) 0%, transparent 11%),
+    /* Green patina accumulation */
+    radial-gradient(circle at 20% 65%, rgba(50, 75, 55, 0.5) 0%, transparent 25%),
+    radial-gradient(circle at 75% 25%, rgba(55, 80, 60, 0.4) 0%, transparent 20%),
+    radial-gradient(circle at 85% 80%, rgba(45, 70, 50, 0.45) 0%, transparent 22%),
+    radial-gradient(circle at 15% 35%, rgba(60, 85, 65, 0.35) 0%, transparent 18%),
+    /* Tarnish and oxidation */
+    radial-gradient(circle at 50% 50%, rgba(60, 50, 35, 0.3) 0%, transparent 60%),
+    /* Base tarnished brass */
+    radial-gradient(circle at 35% 35%,
+      #7a6a4a 0%,
+      #635538 25%,
+      #4d4228 50%,
+      #3a321c 75%,
+      #2d2816 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  z-index: 10;
+  box-shadow:
+    /* Worn, uneven rim */
+    0 0 0 4px #2a2015,
+    0 0 0 7px #4a3d28,
+    0 0 0 8px #1a1510,
+    0 0 0 11px #3d3220,
+    0 0 0 12px #151210,
+    /* Deep mounting shadow */
+    0 8px 25px rgba(0, 0, 0, 0.8),
+    0 15px 40px rgba(0, 0, 0, 0.6),
+    /* Interior depth */
+    inset 0 -25px 40px rgba(0, 0, 0, 0.6),
+    inset 0 10px 20px rgba(100, 90, 70, 0.15),
+    /* Subtle wear highlight */
+    inset 3px 3px 8px rgba(120, 110, 85, 0.2);
+  filter: contrast(1.1) saturate(0.8);
+}
+
+/* Outer decorative ring - heavily oxidized */
+.medallion-ring {
+  position: absolute;
+  inset: -18px;
+  border: 4px solid #3d3525;
+  border-radius: 50%;
+  opacity: 0.7;
+  box-shadow:
+    inset 0 0 8px rgba(0, 0, 0, 0.5),
+    0 0 4px rgba(0, 0, 0, 0.3);
+}
+
+.medallion-ring::before {
+  content: "";
+  position: absolute;
+  inset: 8px;
+  border: 2px solid #4a4030;
+  border-radius: 50%;
+  opacity: 0.5;
+}
+
+/* Extra patina overlay on medallion */
+.medallion-ring::after {
+  content: "";
+  position: absolute;
+  inset: -4px;
+  border-radius: 50%;
+  background:
+    radial-gradient(circle at 30% 70%, rgba(50, 80, 55, 0.3) 0%, transparent 30%),
+    radial-gradient(circle at 80% 40%, rgba(55, 85, 60, 0.25) 0%, transparent 25%);
+  pointer-events: none;
+}
+
+.cover-logo {
+  /* Aged, faded look - not bright white glow */
+  filter:
+    sepia(0.3)
+    brightness(0.85)
+    contrast(1.1)
+    drop-shadow(0 0 8px rgba(80, 70, 50, 0.5));
+  position: relative;
+  z-index: 2;
+  opacity: 0.9;
+}
+
+/* Cover title - AGED, WORN embossed lettering */
+.cover-title {
+  position: absolute;
+  bottom: 130px;
+  font-family: "Cinzel Decorative", "Cinzel", serif;
+  font-size: 2.2rem;
+  font-weight: 700;
+  letter-spacing: 0.4em;
+  /* Tarnished, aged brass color - not shiny gold */
+  color: #7a6a4a;
+  text-shadow:
+    /* Worn embossing effect */
+    0 1px 0 #5a4a32,
+    0 2px 0 #4a3a25,
+    0 3px 6px rgba(0, 0, 0, 0.7),
+    0 5px 12px rgba(0, 0, 0, 0.5),
+    /* Subtle highlight on top edge - worn */
+    0 -1px 0 rgba(120, 100, 70, 0.3);
+  z-index: 10;
+  /* Aged brass gradient - muted, not shiny */
+  background: linear-gradient(180deg,
+    #8a7a5a 0%,
+    #6a5a40 40%,
+    #5a4a32 70%,
+    #4a3a25 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  filter: drop-shadow(0 3px 5px rgba(0, 0, 0, 0.6));
+  /* Slight aging effect */
+  opacity: 0.95;
+}
+
+/* Cover runes - aged and faded */
+.cover-runes {
+  position: absolute;
+  bottom: 55px;
+  display: flex;
+  gap: 20px;
+  /* Tarnished brass - not shiny gold */
+  color: #6a5a42;
+  font-size: 1.1rem;
+  opacity: 0.6;
+  text-shadow:
+    0 1px 2px rgba(0, 0, 0, 0.5),
+    0 0 4px rgba(90, 80, 60, 0.3);
+  z-index: 10;
+}
+
+/* ============================================
+   MAGICAL / WITCHY EFFECTS
+   ============================================ */
+
+/* Cobweb SVG decorations - MORE VISIBLE */
+.cobweb {
+  position: absolute;
+  width: 160px;
+  height: 160px;
+  z-index: 15;
+  pointer-events: none;
+  opacity: 1;
+  filter: drop-shadow(0 0 1px rgba(200, 190, 170, 0.3));
+}
+
+.cobweb path {
+  stroke-width: 0.8 !important;
+}
+
+.cobweb-top-left {
+  top: -5px;
+  left: -5px;
+}
+
+.cobweb-top-right {
+  top: -5px;
+  right: -5px;
+}
+
+.cobweb-bottom-left {
+  bottom: -5px;
+  left: -5px;
+}
+
+/* Stardust container */
+.stardust-container {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 20;
+  overflow: hidden;
+}
+
+/* Individual stardust particle */
+.stardust {
+  position: absolute;
+  width: 2px;
+  height: 2px;
+  background: radial-gradient(circle,
+    rgba(255, 250, 220, 0.9) 0%,
+    rgba(255, 215, 140, 0.6) 40%,
+    transparent 70%);
+  border-radius: 50%;
+  animation: stardust-twinkle 3s ease-in-out infinite;
+  box-shadow:
+    0 0 3px rgba(255, 240, 180, 0.8),
+    0 0 6px rgba(255, 220, 150, 0.5),
+    0 0 12px rgba(255, 200, 100, 0.3);
+}
+
+@keyframes stardust-twinkle {
+  0%, 100% {
+    opacity: 0.2;
+    transform: scale(0.8);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.2);
+  }
+}
+
+/* Floating dust motes */
+.dust-motes {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 12;
+  overflow: hidden;
+}
+
+.dust-mote {
+  position: absolute;
+  background: rgba(180, 160, 130, 0.6);
+  border-radius: 50%;
+  animation: dust-float 10s ease-in-out infinite;
+}
+
+@keyframes dust-float {
+  0%, 100% {
+    transform: translateY(0) translateX(0);
+  }
+  25% {
+    transform: translateY(-15px) translateX(5px);
+  }
+  50% {
+    transform: translateY(-8px) translateX(-8px);
+  }
+  75% {
+    transform: translateY(-20px) translateX(3px);
+  }
+}
+
+/* Mystical glow behind medallion - MAGICAL PURPLE/GOLD */
+.mystical-glow {
+  position: absolute;
+  width: 320px;
+  height: 320px;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -58%);
+  background:
+    /* Inner golden core */
+    radial-gradient(circle,
+      rgba(180, 150, 80, 0.2) 0%,
+      rgba(140, 110, 50, 0.15) 20%,
+      transparent 40%),
+    /* Outer mystical purple haze */
+    radial-gradient(circle,
+      rgba(80, 50, 100, 0.12) 20%,
+      rgba(60, 40, 80, 0.08) 40%,
+      rgba(40, 30, 60, 0.04) 60%,
+      transparent 75%);
+  border-radius: 50%;
+  z-index: 5;
+  animation: mystical-pulse 4s ease-in-out infinite;
+  pointer-events: none;
+}
+
+/* Secondary mystical ring */
+.mystical-glow::before {
+  content: "";
+  position: absolute;
+  inset: -20px;
+  border-radius: 50%;
+  background: radial-gradient(circle,
+    transparent 50%,
+    rgba(100, 70, 120, 0.06) 60%,
+    rgba(80, 50, 100, 0.03) 75%,
+    transparent 85%);
+  animation: mystical-rotate 20s linear infinite;
+}
+
+@keyframes mystical-pulse {
+  0%, 100% {
+    opacity: 0.7;
+    transform: translate(-50%, -58%) scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: translate(-50%, -58%) scale(1.08);
+  }
+}
+
+@keyframes mystical-rotate {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* Extra texture grain overlay */
+.texture-grain {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 50;
+  opacity: 0.4;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+  mix-blend-mode: overlay;
+}
+
+/* Enhanced dust overlay on cover */
+.cover-content::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 100;
+  background:
+    /* Heavy dust accumulation in corners */
+    radial-gradient(ellipse 35% 25% at 5% 5%, rgba(160, 140, 110, 0.25) 0%, transparent 70%),
+    radial-gradient(ellipse 30% 20% at 95% 8%, rgba(150, 130, 100, 0.2) 0%, transparent 65%),
+    radial-gradient(ellipse 40% 30% at 3% 95%, rgba(170, 150, 120, 0.3) 0%, transparent 75%),
+    radial-gradient(ellipse 35% 25% at 97% 92%, rgba(155, 135, 105, 0.22) 0%, transparent 68%),
+    /* Random dust spots */
+    radial-gradient(circle at 20% 30%, rgba(180, 160, 130, 0.15) 0%, transparent 8%),
+    radial-gradient(circle at 75% 45%, rgba(170, 150, 120, 0.12) 0%, transparent 6%),
+    radial-gradient(circle at 40% 70%, rgba(175, 155, 125, 0.1) 0%, transparent 7%),
+    radial-gradient(circle at 85% 25%, rgba(165, 145, 115, 0.13) 0%, transparent 5%),
+    radial-gradient(circle at 15% 80%, rgba(185, 165, 135, 0.11) 0%, transparent 9%),
+    radial-gradient(circle at 60% 15%, rgba(160, 140, 110, 0.14) 0%, transparent 6%),
+    /* Scratches and wear lines */
+    linear-gradient(73deg, transparent 45%, rgba(120, 100, 70, 0.06) 46%, transparent 48%),
+    linear-gradient(127deg, transparent 50%, rgba(110, 90, 60, 0.05) 51%, transparent 53%),
+    linear-gradient(95deg, transparent 42%, rgba(130, 110, 80, 0.04) 43%, transparent 45%),
+    linear-gradient(160deg, transparent 55%, rgba(100, 80, 55, 0.05) 56%, transparent 58%);
+  mix-blend-mode: soft-light;
+}
+
+/* Spine effect */
+.cover-spine {
+  position: absolute;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  width: 25px;
+  background: linear-gradient(to right,
+    transparent 0%,
+    var(--leather-darkest) 20%,
+    var(--leather-dark) 50%,
+    var(--leather-darkest) 80%,
+    transparent 100%);
+  box-shadow: inset -8px 0 20px rgba(0, 0, 0, 0.6);
+}
+
+.back-cover .cover-spine {
+  left: 0;
+  right: auto;
+  box-shadow: inset 8px 0 20px rgba(0, 0, 0, 0.6);
+}
+
+.back-medallion {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 35%, var(--metal-bronze) 0%, var(--metal-dark) 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+  box-shadow:
+    0 0 0 3px var(--metal-bronze),
+    inset 0 0 15px rgba(0, 0, 0, 0.5);
+}
+
+/* ============================================
+   REFINED PARCHMENT PAGES
+   ============================================ */
+
+.parchment-page {
+  width: 100%;
+  height: 100%;
+  padding: 35px 30px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  background: var(--parchment-base);
+  overflow: hidden;
+}
+
+/* Parchment texture - more refined */
+.parchment-texture {
+  position: absolute;
+  inset: 0;
+  background:
+    /* Paper fiber texture */
+    url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='paper'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.03' numOctaves='4' stitchTiles='stitch'/%3E%3CfeDiffuseLighting in='noise' lighting-color='%23f5e6c8' surfaceScale='1.5'%3E%3CfeDistantLight azimuth='45' elevation='55'/%3E%3C/feDiffuseLighting%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23paper)'/%3E%3C/svg%3E"),
+    /* Age spots */
+    radial-gradient(ellipse at 15% 85%, rgba(180, 160, 120, 0.15) 0%, transparent 40%),
+    radial-gradient(ellipse at 85% 15%, rgba(180, 160, 120, 0.12) 0%, transparent 35%),
+    radial-gradient(ellipse at 50% 50%, rgba(200, 180, 140, 0.08) 0%, transparent 50%),
+    /* Edge darkening */
+    linear-gradient(to right, rgba(0,0,0,0.03) 0%, transparent 5%, transparent 95%, rgba(0,0,0,0.03) 100%),
+    linear-gradient(to bottom, rgba(0,0,0,0.02) 0%, transparent 5%, transparent 95%, rgba(0,0,0,0.03) 100%),
+    /* Base */
+    linear-gradient(175deg, var(--parchment-light) 0%, var(--parchment-base) 50%, var(--parchment-dark) 100%);
+  pointer-events: none;
+}
+
+/* Page edge shadow (binding) */
+.page-edge {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 30px;
+  pointer-events: none;
+}
+
+.left-edge {
+  right: 0;
+  background: linear-gradient(to left,
+    rgba(0,0,0,0.12) 0%,
+    rgba(0,0,0,0.05) 30%,
+    transparent 100%);
+}
+
+.right-edge {
+  left: 0;
+  background: linear-gradient(to right,
+    rgba(0,0,0,0.15) 0%,
+    rgba(0,0,0,0.06) 30%,
+    transparent 100%);
+}
+
+/* ============================================
+   ORGANISCHE HOEKVERSIERINGEN - Medieval style
+   ============================================ */
+
+.corner-ornament-svg {
+  position: absolute;
+  width: 70px;
+  height: 70px;
+  pointer-events: none;
+  color: #4a3520; /* Donkerbruin/sepia inkt */
+  filter: blur(0.3px); /* Licht vervagen voor oude inkt effect */
+  opacity: 0.85;
+}
+
+.corner-ornament-svg.top-left {
+  top: 12px;
+  left: 12px;
+  transform-origin: top left;
+}
+
+.corner-ornament-svg.top-right {
+  top: 12px;
+  right: 12px;
+  transform-origin: top right;
+}
+
+.corner-ornament-svg.bottom-left {
+  bottom: 12px;
+  left: 12px;
+  transform-origin: bottom left;
+}
+
+.corner-ornament-svg.bottom-right {
+  bottom: 12px;
+  right: 12px;
+  transform-origin: bottom right;
+}
+
+/* ============================================
+   PAGINA VEROUDERING OVERLAY
+   ============================================ */
+
+.page-aging-overlay {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 2;
+  background:
+    /* Vignette - donkerdere randen */
+    radial-gradient(ellipse 75% 70% at center, transparent 50%, rgba(180, 160, 120, 0.15) 75%, rgba(140, 120, 80, 0.25) 100%),
+    /* Watervlekken */
+    radial-gradient(ellipse 15% 20% at 85% 75%, rgba(160, 140, 100, 0.12) 0%, transparent 70%),
+    radial-gradient(ellipse 12% 18% at 10% 25%, rgba(170, 150, 110, 0.1) 0%, transparent 60%),
+    radial-gradient(ellipse 20% 15% at 70% 15%, rgba(150, 130, 90, 0.08) 0%, transparent 55%),
+    /* Foxing - kleine bruine stipjes */
+    radial-gradient(circle at 15% 80%, rgba(120, 90, 50, 0.15) 0%, transparent 2px),
+    radial-gradient(circle at 82% 22%, rgba(130, 100, 60, 0.12) 0%, transparent 1.5px),
+    radial-gradient(circle at 45% 90%, rgba(110, 80, 45, 0.14) 0%, transparent 2px),
+    radial-gradient(circle at 88% 65%, rgba(125, 95, 55, 0.1) 0%, transparent 1.5px),
+    radial-gradient(circle at 8% 55%, rgba(115, 85, 50, 0.13) 0%, transparent 2px),
+    radial-gradient(circle at 72% 85%, rgba(120, 90, 50, 0.11) 0%, transparent 1.5px),
+    radial-gradient(circle at 35% 12%, rgba(130, 100, 55, 0.12) 0%, transparent 2px),
+    radial-gradient(circle at 92% 42%, rgba(118, 88, 48, 0.1) 0%, transparent 1.5px),
+    radial-gradient(circle at 25% 45%, rgba(122, 92, 52, 0.08) 0%, transparent 1px),
+    radial-gradient(circle at 60% 70%, rgba(128, 98, 58, 0.09) 0%, transparent 1.5px);
+}
+
+/* Extra textuurvariatie */
+.page-aging-overlay::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    /* Ruwere plekken */
+    radial-gradient(ellipse 30% 25% at 20% 60%, rgba(200, 180, 140, 0.06) 0%, transparent 70%),
+    radial-gradient(ellipse 25% 30% at 75% 35%, rgba(190, 170, 130, 0.05) 0%, transparent 65%);
+  mix-blend-mode: multiply;
+}
+
+/* Binding schaduw in het midden */
+.page-edge.left-edge {
+  right: 0;
+  background: linear-gradient(to left,
+    rgba(60, 40, 20, 0.25) 0%,
+    rgba(40, 25, 12, 0.15) 20%,
+    rgba(30, 18, 8, 0.08) 40%,
+    transparent 100%);
+  width: 50px;
+}
+
+.page-edge.right-edge {
+  left: 0;
+  background: linear-gradient(to right,
+    rgba(60, 40, 20, 0.3) 0%,
+    rgba(45, 30, 15, 0.18) 20%,
+    rgba(35, 22, 10, 0.1) 40%,
+    transparent 100%);
+  width: 50px;
+}
+
+/* ============================================
+   DECORATIEVE PAGINANUMMERS
+   ============================================ */
+
+.page-number {
+  position: absolute;
+  bottom: 18px;
+  font-family: "Cinzel Decorative", "Cinzel", serif;
+  font-size: 0.9rem;
+  color: #5a4a30;
+  letter-spacing: 0.15em;
+  opacity: 0.6;
+  /* Oude inkt effect */
+  text-shadow: 0.5px 0.5px 0 rgba(245, 230, 200, 0.3);
+}
+
+/* Decoratieve elementen rond paginanummers */
+.page-number::before,
+.page-number::after {
+  content: "~";
+  font-size: 0.75em;
+  opacity: 0.5;
+  vertical-align: middle;
+}
+
+.page-number::before {
+  margin-right: 0.5em;
+}
+
+.page-number::after {
+  margin-left: 0.5em;
+}
+
+.page-number.left {
+  left: 22px;
+}
+
+.page-number.right {
+  right: 22px;
+}
+
+/* ============================================
+   ARTWORK PAGE
+   ============================================ */
+
+.artwork-page {
+  justify-content: center;
+}
+
+.artwork-frame {
+  position: relative;
+  width: 90%;
+  max-width: 600px;
+  aspect-ratio: 4/5;
+  background: #1a1208; /* Donkere inkt kleur */
+  padding: 10px;
+  /* Organische schaduw alsof het OP de pagina ligt */
+  box-shadow:
+    /* Zachte lift-schaduw */
+    3px 4px 8px rgba(80, 60, 30, 0.25),
+    5px 6px 15px rgba(60, 45, 20, 0.2),
+    /* Subtiele rand-schaduw */
+    0 0 1px rgba(40, 30, 15, 0.4);
+  /* Iets organischere vorm met border-radius variatie */
+  border-radius: 2px 3px 2px 3px;
+}
+
+/* Geschilderde/inkt border - organisch, niet perfect */
+.frame-border {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  /* Onregelmatige inkt-rand effect */
+  border: none;
+  background:
+    /* Top rand - variërende dikte */
+    linear-gradient(90deg,
+      rgba(60,45,25,0.9) 0%, rgba(50,35,20,0.85) 20%, rgba(65,50,30,0.9) 40%,
+      rgba(55,40,22,0.88) 60%, rgba(58,43,25,0.9) 80%, rgba(52,38,20,0.85) 100%
+    ),
+    /* Inkt spatters aan de randen */
+    radial-gradient(ellipse 3px 2px at 15% 2%, rgba(40,30,15,0.6) 0%, transparent 100%),
+    radial-gradient(ellipse 2px 3px at 85% 98%, rgba(45,32,18,0.5) 0%, transparent 100%),
+    radial-gradient(ellipse 2px 2px at 3% 40%, rgba(42,30,16,0.4) 0%, transparent 100%);
+  /* Masker zodat alleen de rand zichtbaar is */
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask-composite: exclude;
+  padding: 8px;
+  opacity: 0.95;
+  filter: blur(0.2px);
+}
+
+.artwork-image-container {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background: #111;
+}
+
+.artwork-image {
+  object-fit: cover;
+  transition: transform 0.5s ease;
+}
+
+.blacklight-toggle {
+  position: absolute;
+  bottom: -40px;
+  right: 0;
+  background: linear-gradient(145deg, var(--leather-mid), var(--leather-dark));
+  border: 1px solid var(--metal-bronze);
+  border-radius: 6px;
+  padding: 6px 12px;
+  cursor: pointer;
+  font-size: 1.1rem;
+  transition: all 0.3s ease;
+  z-index: 10;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+}
+
+.blacklight-toggle:hover {
+  background: linear-gradient(145deg, var(--leather-light), var(--leather-mid));
+  box-shadow: 0 0 15px rgba(212, 175, 55, 0.4);
+}
+
+/* ============================================
+   DESCRIPTION PAGE
+   ============================================ */
+
+.description-page {
+  justify-content: center;
+}
+
+.description-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 0 20px;
+  max-width: 100%;
+  position: relative;
+  z-index: 5;
+}
+
+.artwork-title {
+  font-family: "Cinzel", serif;
+  font-size: 2.2rem;
+  font-weight: 600;
+  color: var(--ink-dark);
+  margin: 0 0 12px;
+  letter-spacing: 0.08em;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+.title-underline {
+  width: 120px;
+  height: 1px;
+  background: linear-gradient(to right, transparent, var(--ink-light), transparent);
+  margin: 0 0 25px;
+}
+
+.artwork-details {
+  font-size: 1.15rem;
+  color: var(--ink-mid);
+  margin-bottom: 25px;
+  line-height: 1.9;
+}
+
+.detail-label {
+  font-weight: 600;
+  color: var(--ink-dark);
+}
+
+.description-divider {
+  color: var(--ink-faded);
+  opacity: 0.5;
+  margin: 15px 0;
+  font-size: 0.8rem;
+}
+
+.artwork-description {
+  font-size: 1.25rem;
+  line-height: 1.9;
+  color: var(--ink-mid);
+  max-width: 100%;
+  text-align: justify;
+  hyphens: auto;
+}
+
+.blacklight-note {
+  font-size: 0.9rem;
+  color: #6b4c8a;
+  font-style: italic;
+  margin-top: 20px;
+  padding: 10px 18px;
+  background: rgba(107, 76, 138, 0.08);
+  border-left: 2px solid rgba(107, 76, 138, 0.3);
+}
+
+/* ============================================
+   FINAL PAGE
+   ============================================ */
+
+.final-page {
+  justify-content: center;
+}
+
+.final-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.final-title {
+  font-family: "Cinzel", serif;
+  font-size: 1.6rem;
+  color: var(--ink-dark);
+  margin: 0 0 8px;
+}
+
+.contact-text {
+  font-size: 1rem;
+  line-height: 1.8;
+  color: var(--ink-mid);
+  max-width: 90%;
+  margin: 20px 0;
+}
+
+.contact-info {
+  font-family: "Cinzel", serif;
+  font-size: 1.1rem;
+  color: var(--ink-dark);
+  margin: 15px 0;
+}
+
+.final-ornament {
+  margin: 25px 0 15px;
+}
+
+.copyright {
+  font-size: 0.85rem;
+  color: var(--ink-faded);
+  margin-top: 10px;
+}
+
+/* ============================================
+   NAVIGATION
+   ============================================ */
+
+.nav-hint {
+  display: flex;
+  align-items: center;
+  gap: 25px;
+  margin-top: 25px;
+  color: rgba(255, 255, 255, 0.6);
+  font-family: "Crimson Text", serif;
+  font-size: 1rem;
+  z-index: 20;
+}
+
+.hint-arrow {
+  cursor: pointer;
+  font-size: 1.4rem;
+  opacity: 0.5;
+  transition: all 0.3s ease;
+  padding: 12px;
+}
+
+.hint-arrow:hover {
+  opacity: 1;
+  color: var(--metal-gold);
+  text-shadow: 0 0 12px var(--metal-gold);
+}
+
+.hint-text {
+  min-width: 100px;
+  text-align: center;
+  font-size: 0.95rem;
+}
+
+.keyboard-hint {
+  margin-top: 12px;
+  color: rgba(255, 255, 255, 0.35);
+  font-size: 0.8rem;
+  z-index: 20;
+}
+
+/* ============================================
+   LOADING SCREEN
+   ============================================ */
+
+.loading-screen {
+  position: fixed;
+  inset: 0;
+  background: #030308;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  transition: opacity 0.5s ease;
+}
+
+.loading-screen.fade-out {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.loading-book {
+  width: 80px;
+  height: 100px;
+  position: relative;
+  animation: book-pulse 2s ease-in-out infinite;
+}
+
+@keyframes book-pulse {
+  0%, 100% {
+    transform: scale(1);
+    filter: drop-shadow(0 0 10px var(--metal-gold));
+  }
+  50% {
+    transform: scale(1.05);
+    filter: drop-shadow(0 0 25px var(--metal-gold));
+  }
+}
+
+.loading-text {
+  color: var(--metal-gold);
+  font-family: "Cinzel", serif;
+  font-size: 1.1rem;
+  margin-top: 20px;
+  animation: text-glow 2s ease-in-out infinite;
+}
+
+@keyframes text-glow {
+  0%, 100% { opacity: 0.4; }
+  50% { opacity: 1; }
+}
+
+/* ============================================
+   PAGE-FLIP LIBRARY OVERRIDES
+   ============================================ */
+
+.stf__parent {
+  overflow: visible !important;
+}
+
+.stf__wrapper {
+  box-shadow:
+    0 5px 30px rgba(0, 0, 0, 0.4),
+    0 15px 60px rgba(0, 0, 0, 0.35),
+    0 30px 100px rgba(0, 0, 0, 0.3),
+    0 50px 150px rgba(0, 0, 0, 0.2);
+  border-radius: 3px;
+}
+
+/* Book spine visible effect when open */
+.stf__block {
+  background: linear-gradient(to right,
+    rgba(26, 15, 8, 0.9) 0%,
+    rgba(45, 24, 16, 0.8) 50%,
+    rgba(26, 15, 8, 0.9) 100%);
+}
+
+/* ============================================
+   RESPONSIVE
+   ============================================ */
+
+@media (max-width: 1024px) {
+  .artwork-title {
+    font-size: 1.4rem;
+  }
+
+  .artwork-description {
+    font-size: 0.95rem;
+    line-height: 1.7;
+  }
+
+  .parchment-page {
+    padding: 25px 20px;
+  }
+
+  .cover-medallion {
+    width: 110px;
+    height: 110px;
+  }
+
+  .cover-title {
+    font-size: 1.1rem;
+    bottom: 80px;
+  }
+}
+
+@media (max-width: 640px) {
+  .cover-corners .corner {
+    width: 45px;
+    height: 45px;
+  }
+
+  .artwork-frame {
+    width: 92%;
+  }
 }

@@ -502,11 +502,12 @@ export default function GrimoireBook() {
             </React.Fragment>
           ))}
 
-          {/* Final Pages - Contact */}
+          {/* Final Pages - Contact (Left page) */}
           <div className="page page-content">
             <div className="parchment-page final-page">
               <div className="parchment-texture" />
               <div className="page-aging-overlay" />
+              <div className="page-edge left-edge" />
               <CornerOrnament position="top-left" />
               <CornerOrnament position="top-right" />
               <CornerOrnament position="bottom-left" />
@@ -531,6 +532,28 @@ export default function GrimoireBook() {
                   />
                 </div>
                 <p className="copyright">All artwork © Galaxtc</p>
+              </div>
+            </div>
+          </div>
+
+          {/* Final Page - Colophon/End (Right page - pairs with Contact) */}
+          <div className="page page-content">
+            <div className="parchment-page colophon-page">
+              <div className="parchment-texture" />
+              <div className="page-aging-overlay" />
+              <div className="page-edge right-edge" />
+              <CornerOrnament position="top-left" />
+              <CornerOrnament position="top-right" />
+              <CornerOrnament position="bottom-left" />
+              <CornerOrnament position="bottom-right" />
+              <div className="colophon-content">
+                <div className="colophon-ornament">✦</div>
+                <p className="colophon-text">
+                  Each piece tells a story of cosmic wonder,<br />
+                  captured in pigment and light.
+                </p>
+                <div className="colophon-divider">~ ✧ ~</div>
+                <p className="colophon-year">MMXXV</p>
               </div>
             </div>
           </div>

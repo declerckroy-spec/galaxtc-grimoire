@@ -64,10 +64,28 @@ const CornerOrnament = ({ position }: { position: 'top-left' | 'top-right' | 'bo
 export default function GrimoireBook() {
   const bookRef = useRef<HTMLDivElement>(null);
   const pageFlipRef = useRef<PageFlip | null>(null);
+  const audioRef = useRef<HTMLAudioElement | null>(null);
   const [currentPage, setCurrentPage] = useState(0);
   const [isOpen, setIsOpen] = useState(false);
   const [showBlacklight, setShowBlacklight] = useState<Record<string, boolean>>({});
   const [isMobile, setIsMobile] = useState(false);
+  const [isReady, setIsReady] = useState(false);
+
+  // Initialize audio for page turn sound
+  useEffect(() => {
+    audioRef.current = new Audio("/sounds/page-turn.mp3");
+    audioRef.current.volume = 0.4;
+  }, []);
+
+  // Play page turn sound
+  const playPageSound = useCallback(() => {
+    if (audioRef.current) {
+      audioRef.current.currentTime = 0;
+      audioRef.current.play().catch(() => {
+        // Ignore autoplay errors
+      });
+    }
+  }, []);
 
   // Calculate total pages
   const totalPages = artworks.length * 2 + 2; // artwork spreads + covers
@@ -75,6 +93,7 @@ export default function GrimoireBook() {
   useEffect(() => {
     const checkMobile = () => {
       setIsMobile(window.innerWidth < 1024);
+      setIsReady(true);
     };
     checkMobile();
     window.addEventListener("resize", checkMobile);
@@ -82,7 +101,7 @@ export default function GrimoireBook() {
   }, []);
 
   useEffect(() => {
-    if (!bookRef.current) return;
+    if (!bookRef.current || !isReady) return;
 
     // Destroy existing instance if any
     if (pageFlipRef.current) {
@@ -141,6 +160,7 @@ export default function GrimoireBook() {
 
       pageFlipRef.current.on("flip", (e) => {
         setCurrentPage(e.data);
+        playPageSound();
         if (e.data > 0) {
           setIsOpen(true);
         }
@@ -154,7 +174,7 @@ export default function GrimoireBook() {
         pageFlipRef.current = null;
       }
     };
-  }, [isMobile]);
+  }, [isMobile, isReady, playPageSound]);
 
   const flipNext = useCallback(() => {
     pageFlipRef.current?.flipNext();
@@ -176,6 +196,15 @@ export default function GrimoireBook() {
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [flipNext, flipPrev]);
+
+  // Don't render until we know if it's mobile
+  if (!isReady) {
+    return (
+      <div className="grimoire-container">
+        <div className="loading-grimoire">Loading...</div>
+      </div>
+    );
+  }
 
   return (
     <div className="grimoire-container">
@@ -325,86 +354,140 @@ export default function GrimoireBook() {
             </div>
           </div>
 
-          {/* Artwork Spreads - Left: Image, Right: Description */}
+          {/* Artwork Spreads - Desktop: Left=Image, Right=Description / Mobile: Combined */}
           {artworks.map((artwork, index) => (
             <React.Fragment key={artwork.id}>
-              {/* Left page - Artwork */}
-              <div className="page page-content">
-                <div className="parchment-page artwork-page">
-                  <div className="parchment-texture" />
-                  <div className="page-aging-overlay" />
-                  <div className="page-edge left-edge" />
-                  <CornerOrnament position="top-left" />
-                  <CornerOrnament position="top-right" />
-                  <CornerOrnament position="bottom-left" />
-                  <CornerOrnament position="bottom-right" />
-                  <div className="artwork-frame">
-                    <div className="frame-border" />
-                    <div className="artwork-image-container">
-                      <Image
-                        src={
-                          artwork.hasBlacklight && showBlacklight[artwork.id]
-                            ? artwork.blacklightImage!
-                            : artwork.image
-                        }
-                        alt={artwork.title}
-                        fill
-                        className="artwork-image"
-                        sizes="(max-width: 1024px) 320px, 500px"
-                        priority={index < 2}
-                      />
-                    </div>
-                    {artwork.hasBlacklight && (
-                      <button
-                        className="blacklight-toggle"
-                        onClick={() => toggleBlacklight(artwork.id)}
-                        title="Toggle blacklight view"
-                      >
-                        {showBlacklight[artwork.id] ? "☀️" : "🔮"}
-                      </button>
-                    )}
-                  </div>
-                  <div className="page-number left">{index * 2 + 1}</div>
-                </div>
-              </div>
+              {isMobile ? (
+                /* Mobile: Combined page with image and description */
+                <div className="page page-content">
+                  <div className="parchment-page combined-page">
+                    <div className="parchment-texture" />
+                    <div className="page-aging-overlay" />
+                    <CornerOrnament position="top-left" />
+                    <CornerOrnament position="top-right" />
+                    <CornerOrnament position="bottom-left" />
+                    <CornerOrnament position="bottom-right" />
 
-              {/* Right page - Description */}
-              <div className="page page-content">
-                <div className="parchment-page description-page">
-                  <div className="parchment-texture" />
-                  <div className="page-aging-overlay" />
-                  <div className="page-edge right-edge" />
-                  <CornerOrnament position="top-left" />
-                  <CornerOrnament position="top-right" />
-                  <CornerOrnament position="bottom-left" />
-                  <CornerOrnament position="bottom-right" />
-                  <div className="description-content">
-                    <h2 className="artwork-title">{artwork.title}</h2>
-                    <div className="title-underline" />
-                    <div className="artwork-details">
-                      <p className="technique">
-                        <span className="detail-label">Technique:</span>{" "}
-                        {artwork.technique}
-                      </p>
-                      {artwork.size && (
-                        <p className="size">
-                          <span className="detail-label">Size:</span> {artwork.size}
-                        </p>
+                    {/* Compact artwork frame for mobile */}
+                    <div className="artwork-frame mobile-frame">
+                      <div className="frame-border" />
+                      <div className="artwork-image-container">
+                        <Image
+                          src={
+                            artwork.hasBlacklight && showBlacklight[artwork.id]
+                              ? artwork.blacklightImage!
+                              : artwork.image
+                          }
+                          alt={artwork.title}
+                          fill
+                          className="artwork-image"
+                          sizes="280px"
+                          priority={index < 2}
+                        />
+                      </div>
+                      {artwork.hasBlacklight && (
+                        <button
+                          className="blacklight-toggle"
+                          onClick={() => toggleBlacklight(artwork.id)}
+                          title="Toggle blacklight view"
+                        >
+                          {showBlacklight[artwork.id] ? "☀️" : "🔮"}
+                        </button>
                       )}
                     </div>
-                    <div className="description-divider">
-                      <span>&#x2726;</span>
-                    </div>
-                    <p className="artwork-description">{artwork.description}</p>
-                    {artwork.hasBlacklight && (
-                      <p className="blacklight-note">
-                        This artwork transforms under UV blacklight
+
+                    {/* Compact description for mobile */}
+                    <div className="mobile-description">
+                      <h2 className="artwork-title mobile-title">{artwork.title}</h2>
+                      <p className="technique mobile-technique">
+                        {artwork.technique}
                       </p>
-                    )}
+                    </div>
+                    <div className="page-number">{index + 1}</div>
                   </div>
-                  <div className="page-number right">{index * 2 + 2}</div>
                 </div>
-              </div>
+              ) : (
+                /* Desktop: Separate pages for image and description */
+                <>
+                  {/* Left page - Artwork */}
+                  <div className="page page-content">
+                    <div className="parchment-page artwork-page">
+                      <div className="parchment-texture" />
+                      <div className="page-aging-overlay" />
+                      <div className="page-edge left-edge" />
+                      <CornerOrnament position="top-left" />
+                      <CornerOrnament position="top-right" />
+                      <CornerOrnament position="bottom-left" />
+                      <CornerOrnament position="bottom-right" />
+                      <div className="artwork-frame">
+                        <div className="frame-border" />
+                        <div className="artwork-image-container">
+                          <Image
+                            src={
+                              artwork.hasBlacklight && showBlacklight[artwork.id]
+                                ? artwork.blacklightImage!
+                                : artwork.image
+                            }
+                            alt={artwork.title}
+                            fill
+                            className="artwork-image"
+                            sizes="500px"
+                            priority={index < 2}
+                          />
+                        </div>
+                        {artwork.hasBlacklight && (
+                          <button
+                            className="blacklight-toggle"
+                            onClick={() => toggleBlacklight(artwork.id)}
+                            title="Toggle blacklight view"
+                          >
+                            {showBlacklight[artwork.id] ? "☀️" : "🔮"}
+                          </button>
+                        )}
+                      </div>
+                      <div className="page-number left">{index * 2 + 1}</div>
+                    </div>
+                  </div>
+
+                  {/* Right page - Description */}
+                  <div className="page page-content">
+                    <div className="parchment-page description-page">
+                      <div className="parchment-texture" />
+                      <div className="page-aging-overlay" />
+                      <div className="page-edge right-edge" />
+                      <CornerOrnament position="top-left" />
+                      <CornerOrnament position="top-right" />
+                      <CornerOrnament position="bottom-left" />
+                      <CornerOrnament position="bottom-right" />
+                      <div className="description-content">
+                        <h2 className="artwork-title">{artwork.title}</h2>
+                        <div className="title-underline" />
+                        <div className="artwork-details">
+                          <p className="technique">
+                            <span className="detail-label">Technique:</span>{" "}
+                            {artwork.technique}
+                          </p>
+                          {artwork.size && (
+                            <p className="size">
+                              <span className="detail-label">Size:</span> {artwork.size}
+                            </p>
+                          )}
+                        </div>
+                        <div className="description-divider">
+                          <span>&#x2726;</span>
+                        </div>
+                        <p className="artwork-description">{artwork.description}</p>
+                        {artwork.hasBlacklight && (
+                          <p className="blacklight-note">
+                            This artwork transforms under UV blacklight
+                          </p>
+                        )}
+                      </div>
+                      <div className="page-number right">{index * 2 + 2}</div>
+                    </div>
+                  </div>
+                </>
+              )}
             </React.Fragment>
           ))}
 

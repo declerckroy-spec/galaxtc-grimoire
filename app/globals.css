@@ -1365,6 +1365,63 @@ body {
 }
 
 /* ============================================
+   MOBILE COMBINED PAGE
+   ============================================ */
+
+.combined-page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 25px 15px 15px;
+  gap: 8px;
+  overflow: visible !important;
+}
+
+.mobile-frame.artwork-frame {
+  width: 60% !important;
+  max-width: 180px !important;
+  aspect-ratio: 1 !important;
+  margin: 0 auto;
+  flex-shrink: 0;
+  position: relative;
+  z-index: 10;
+}
+
+.mobile-frame .artwork-image-container {
+  width: 100%;
+  height: 100%;
+}
+
+.mobile-description {
+  text-align: center;
+  padding: 8px 12px;
+  flex-shrink: 0;
+  background: rgba(180, 160, 130, 0.3);
+  border-radius: 4px;
+  margin-top: 8px;
+  width: 90%;
+  max-width: 280px;
+  position: relative;
+  z-index: 10;
+}
+
+.mobile-title {
+  font-family: "Cinzel", serif;
+  font-size: 1rem;
+  color: var(--ink-dark);
+  margin: 0 0 4px;
+  line-height: 1.2;
+}
+
+.mobile-technique {
+  font-size: 0.8rem;
+  color: var(--ink-mid);
+  font-style: italic;
+  margin: 0;
+}
+
+/* ============================================
    FINAL PAGE
    ============================================ */
 

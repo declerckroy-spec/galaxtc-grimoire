@@ -1173,12 +1173,15 @@ body {
   position: absolute;
   bottom: 18px;
   font-family: "Cinzel Decorative", "Cinzel", serif;
-  font-size: 0.9rem;
-  color: #5a4a30;
+  font-size: 1.1rem;
+  color: #3d2a15;
+  font-weight: 700;
   letter-spacing: 0.15em;
-  opacity: 0.6;
-  /* Oude inkt effect */
-  text-shadow: 0.5px 0.5px 0 rgba(245, 230, 200, 0.3);
+  opacity: 0.85;
+  /* Oude inkt effect - meer zichtbaar */
+  text-shadow:
+    0.5px 0.5px 0 rgba(245, 230, 200, 0.4),
+    1px 1px 2px rgba(0, 0, 0, 0.15);
 }
 
 /* Decoratieve elementen rond paginanummers */
@@ -1389,8 +1392,8 @@ body {
 }
 
 .mobile-frame.artwork-frame {
-  width: 48% !important;
-  max-width: 150px !important;
+  width: 60% !important;
+  max-width: 200px !important;
   aspect-ratio: 1 !important;
   margin: 0 auto;
   flex-shrink: 0;
@@ -1420,19 +1423,19 @@ body {
 
 .mobile-title {
   font-family: "Cinzel", serif;
-  font-size: 0.95rem;
+  font-size: 0.85rem;
   color: var(--ink-dark);
-  margin: 0 0 6px;
-  line-height: 1.2;
+  margin: 0 0 4px;
+  line-height: 1.15;
   text-align: center;
   letter-spacing: 0.02em;
 }
 
 .mobile-technique,
 .mobile-size {
-  font-size: 0.72rem;
+  font-size: 0.6rem;
   color: var(--ink-mid);
-  margin: 3px 0;
+  margin: 2px 0;
   display: block;
 }
 
@@ -1445,13 +1448,13 @@ body {
 }
 
 .mobile-desc-text {
-  font-size: 0.65rem;
-  line-height: 1.45;
+  font-size: 0.55rem;
+  line-height: 1.35;
   color: var(--ink-mid);
-  margin: 6px 0 0;
+  margin: 4px 0 0;
   text-align: left;
   border-top: 1px solid rgba(140, 100, 60, 0.2);
-  padding-top: 6px;
+  padding-top: 4px;
 }
 
 .mobile-blacklight {
@@ -1566,6 +1569,18 @@ body {
   min-width: 100px;
   text-align: center;
   font-size: 0.95rem;
+}
+
+/* Hide page counter on mobile, show only arrows */
+@media (max-width: 1023px) {
+  .hint-text {
+    display: none !important;
+  }
+
+  .nav-hint {
+    gap: 10px !important;
+    padding: 10px 20px !important;
+  }
 }
 
 .keyboard-hint {

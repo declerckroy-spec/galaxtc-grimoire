@@ -71,19 +71,24 @@ export default function GrimoireBook() {
   const [isMobile, setIsMobile] = useState(false);
   const [isReady, setIsReady] = useState(false);
 
-  // Initialize audio for page turn sound
+  // Initialize audio for page turn sound - preload for instant playback
   useEffect(() => {
-    audioRef.current = new Audio("/sounds/page-turn.mp3");
-    audioRef.current.volume = 0.4;
+    const audio = new Audio("/sounds/pageturn-102978.mp3");
+    audio.volume = 0.5;
+    audio.preload = "auto";
+    // Preload by loading the audio
+    audio.load();
+    audioRef.current = audio;
   }, []);
 
-  // Play page turn sound
+  // Play page turn sound - instant playback
   const playPageSound = useCallback(() => {
     if (audioRef.current) {
-      audioRef.current.currentTime = 0;
-      audioRef.current.play().catch(() => {
-        // Ignore autoplay errors
-      });
+      // Clone the audio for overlapping sounds and instant play
+      const sound = audioRef.current.cloneNode() as HTMLAudioElement;
+      sound.volume = 0.5;
+      sound.playbackRate = 1.1; // Slightly faster
+      sound.play().catch(() => {});
     }
   }, []);
 
@@ -225,7 +230,7 @@ export default function GrimoireBook() {
 
       {/* Book wrapper with 3D perspective */}
       <div className="book-wrapper">
-        <div ref={bookRef} className={`grimoire-book ${isOpen ? 'is-open' : ''}`}>
+        <div ref={bookRef} key={`book-${isMobile}`} className={`grimoire-book ${isOpen ? 'is-open' : ''}`}>
           {/* Front Cover */}
           <div className="page page-cover" data-density="hard">
             <div className="cover-content front-cover">
@@ -397,16 +402,17 @@ export default function GrimoireBook() {
                           </p>
                         )}
                         <p className="artwork-description mobile-desc-text">{artwork.description}</p>
-                        {artwork.hasBlacklight && (
-                          <button
-                            className="blacklight-toggle mobile-blacklight"
-                            onClick={() => toggleBlacklight(artwork.id)}
-                            title="Toggle blacklight view"
-                          >
-                            {showBlacklight[artwork.id] ? "☀️ Normal" : "🔮 Blacklight"}
-                          </button>
-                        )}
                       </div>
+                      {/* Blacklight toggle outside scrollable area */}
+                      {artwork.hasBlacklight && (
+                        <button
+                          className="blacklight-toggle mobile-blacklight"
+                          onClick={() => toggleBlacklight(artwork.id)}
+                          title="Toggle blacklight view"
+                        >
+                          {showBlacklight[artwork.id] ? "☀️ Normal" : "🔮 Blacklight"}
+                        </button>
+                      )}
                     </div>
                     <div className="page-number">{index + 1}</div>
                   </div>

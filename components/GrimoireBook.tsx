@@ -562,22 +562,114 @@ export default function GrimoireBook() {
           <div className="page page-cover" data-density="hard">
             <div className="cover-content back-cover">
               <div className="cover-texture" />
-              <div className="cover-corners">
-                <div className="corner top-left" />
-                <div className="corner top-right" />
-                <div className="corner bottom-left" />
-                <div className="corner bottom-right" />
+              <div className="cover-grid" />
+
+              {/* Cobweb corners - matching front cover */}
+              <svg className="cobweb cobweb-top-left" viewBox="0 0 100 100" preserveAspectRatio="none">
+                <path d="M0,0 L100,100 M0,0 L70,100 M0,0 L100,70 M0,0 L40,100 M0,0 L100,40 M0,0 L20,100 M0,0 L100,20"
+                      stroke="rgba(200,190,170,0.25)" strokeWidth="0.4" fill="none"/>
+                <path d="M15,0 Q15,15 0,15 M30,0 Q30,30 0,30 M50,0 Q50,50 0,50 M70,0 Q70,70 0,70"
+                      stroke="rgba(180,170,150,0.2)" strokeWidth="0.3" fill="none"/>
+              </svg>
+              <svg className="cobweb cobweb-top-right" viewBox="0 0 100 100" preserveAspectRatio="none">
+                <path d="M100,0 L0,100 M100,0 L30,100 M100,0 L0,70 M100,0 L60,100 M100,0 L0,40"
+                      stroke="rgba(200,190,170,0.22)" strokeWidth="0.4" fill="none"/>
+                <path d="M85,0 Q85,15 100,15 M70,0 Q70,30 100,30 M50,0 Q50,50 100,50"
+                      stroke="rgba(180,170,150,0.18)" strokeWidth="0.3" fill="none"/>
+              </svg>
+              <svg className="cobweb cobweb-bottom-right" viewBox="0 0 100 100" preserveAspectRatio="none">
+                <path d="M100,100 L0,0 M100,100 L30,0 M100,100 L0,30 M100,100 L60,0 M100,100 L0,60"
+                      stroke="rgba(190,180,160,0.2)" strokeWidth="0.35" fill="none"/>
+                <path d="M100,85 Q85,85 85,100 M100,70 Q70,70 70,100 M100,50 Q50,50 50,100"
+                      stroke="rgba(180,170,150,0.15)" strokeWidth="0.25" fill="none"/>
+              </svg>
+
+              {/* Burn marks */}
+              <div className="burn-marks-container">
+                {[...Array(6)].map((_, i) => (
+                  <div
+                    key={`burn-back-${i}`}
+                    className="burn-mark"
+                    style={{
+                      left: `${10 + Math.random() * 80}%`,
+                      top: `${10 + Math.random() * 80}%`,
+                      width: `${15 + Math.random() * 40}px`,
+                      height: `${10 + Math.random() * 30}px`,
+                      transform: `rotate(${Math.random() * 360}deg)`,
+                      opacity: 0.12 + Math.random() * 0.2,
+                    }}
+                  />
+                ))}
               </div>
+
+              {/* Dust motes */}
+              <div className="dust-motes">
+                {[...Array(15)].map((_, i) => (
+                  <div
+                    key={`dust-back-${i}`}
+                    className="dust-mote"
+                    style={{
+                      left: `${Math.random() * 100}%`,
+                      top: `${Math.random() * 100}%`,
+                      animationDelay: `${Math.random() * 8}s`,
+                      animationDuration: `${6 + Math.random() * 8}s`,
+                      opacity: 0.06 + Math.random() * 0.12,
+                      width: `${1 + Math.random() * 1.5}px`,
+                      height: `${1 + Math.random() * 1.5}px`,
+                    }}
+                  />
+                ))}
+              </div>
+
+              {/* Spine studs - on the right side for back cover */}
+              <div className="spine-studs back-spine-studs">
+                {[...Array(5)].map((_, i) => (
+                  <div key={`spine-stud-back-${i}`} className="spine-stud" />
+                ))}
+              </div>
+
+              {/* Corner studs */}
+              <div className="cover-studs">
+                <div className="stud stud-top-left" />
+                <div className="stud stud-top-right" />
+                <div className="stud stud-bottom-left" />
+                <div className="stud stud-bottom-right" />
+              </div>
+
+              {/* Decorative stud border frame */}
+              <div className="stud-border">
+                {[...Array(10)].map((_, i) => (
+                  <div key={`stud-top-back-${i}`} className="border-stud border-stud-top" style={{ left: `${12 + i * 8}%` }} />
+                ))}
+                {[...Array(10)].map((_, i) => (
+                  <div key={`stud-bottom-back-${i}`} className="border-stud border-stud-bottom" style={{ left: `${12 + i * 8}%` }} />
+                ))}
+                {[...Array(6)].map((_, i) => (
+                  <div key={`stud-left-back-${i}`} className="border-stud border-stud-left" style={{ top: `${18 + i * 12}%` }} />
+                ))}
+                {[...Array(6)].map((_, i) => (
+                  <div key={`stud-right-back-${i}`} className="border-stud border-stud-right" style={{ top: `${18 + i * 12}%` }} />
+                ))}
+              </div>
+
               <div className="cover-border" />
+
+              {/* Central medallion with logo */}
               <div className="back-medallion">
                 <Image
                   src="/artwork/Galaxtc logo.png"
                   alt="Galaxtc"
-                  width={50}
-                  height={50}
+                  width={60}
+                  height={60}
                   className="cover-logo small"
                 />
               </div>
+
+              {/* Spine on the right for back cover */}
+              <div className="cover-spine back-spine" />
+
+              {/* Texture grain */}
+              <div className="texture-grain" />
             </div>
           </div>
         </div>

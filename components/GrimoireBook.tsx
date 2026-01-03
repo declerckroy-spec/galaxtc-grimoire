@@ -402,22 +402,22 @@ export default function GrimoireBook() {
                           </p>
                         )}
                         <p className="artwork-description mobile-desc-text">{artwork.description}</p>
-                      </div>
 
-                      {/* Blacklight toggle section below description */}
-                      {artwork.hasBlacklight && (
-                        <div className="mobile-blacklight-section">
-                          <p className="blacklight-hint">
-                            This artwork transforms under UV blacklight
-                          </p>
-                          <button
-                            className="blacklight-toggle mobile-blacklight"
-                            onClick={() => toggleBlacklight(artwork.id)}
-                          >
-                            {showBlacklight[artwork.id] ? "View Normal" : "View Blacklight"}
-                          </button>
-                        </div>
-                      )}
+                        {/* Blacklight toggle section - inline with description */}
+                        {artwork.hasBlacklight && (
+                          <div className="mobile-blacklight-section">
+                            <p className="blacklight-hint">
+                              This artwork transforms under UV blacklight
+                            </p>
+                            <button
+                              className="blacklight-toggle mobile-blacklight"
+                              onClick={() => toggleBlacklight(artwork.id)}
+                            >
+                              {showBlacklight[artwork.id] ? "View Normal" : "View Blacklight"}
+                            </button>
+                          </div>
+                        )}
+                      </div>
                     </div>
                     <div className="page-number">{index + 1}</div>
                   </div>

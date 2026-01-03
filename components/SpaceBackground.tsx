@@ -9,6 +9,7 @@ interface Star {
   opacity: number;
   twinkleSpeed: number;
   twinkleOffset: number;
+  color: { r: number; g: number; b: number }; // Star color
 }
 
 interface Nebula {
@@ -41,27 +42,56 @@ export default function SpaceBackground() {
     };
 
     const initializeStars = () => {
-      const starCount = Math.floor((canvas.width * canvas.height) / 3000);
+      // More animated twinkling stars for dynamic feel
+      const starCount = 400; // More movement
       starsRef.current = [];
 
+      // Star color palette - realistic star colors
+      const starColors = [
+        { r: 255, g: 255, b: 255 },   // Pure white (most common)
+        { r: 255, g: 255, b: 255 },   // Pure white
+        { r: 255, g: 255, b: 255 },   // Pure white
+        { r: 255, g: 250, b: 240 },   // Warm white
+        { r: 255, g: 245, b: 230 },   // Cream white
+        { r: 200, g: 220, b: 255 },   // Cool blue-white
+        { r: 180, g: 200, b: 255 },   // Light blue
+        { r: 255, g: 220, b: 180 },   // Warm yellow
+        { r: 255, g: 200, b: 150 },   // Orange tint
+        { r: 255, g: 180, b: 180 },   // Soft red/pink
+        { r: 220, g: 180, b: 255 },   // Soft purple
+      ];
+
       for (let i = 0; i < starCount; i++) {
+        const rand = Math.random();
+        const isBright = rand > 0.85; // 15% bright accent stars
+        const isMedium = rand > 0.5 && rand <= 0.85; // 35% medium
+
+        // Pick random color from palette
+        const color = starColors[Math.floor(Math.random() * starColors.length)];
+
         starsRef.current.push({
           x: Math.random() * canvas.width,
           y: Math.random() * canvas.height,
-          size: Math.random() * 2 + 0.5,
-          opacity: Math.random() * 0.8 + 0.2,
-          twinkleSpeed: Math.random() * 0.02 + 0.005,
+          size: isBright
+            ? Math.random() * 2 + 2 // 2-4px bright (smaller, more refined)
+            : isMedium
+            ? Math.random() * 1.5 + 1 // 1-2.5px medium
+            : Math.random() * 0.8 + 0.5, // 0.5-1.3px small
+          opacity: 1,
+          twinkleSpeed: Math.random() * 0.025 + 0.008, // Faster twinkle
           twinkleOffset: Math.random() * Math.PI * 2,
+          color,
         });
       }
     };
 
     const initializeNebulae = () => {
+      // Very subtle nebulae - almost invisible
       const nebulaColors = [
-        "rgba(147, 51, 234, 0.03)", // purple
-        "rgba(59, 130, 246, 0.02)", // blue
-        "rgba(236, 72, 153, 0.02)", // pink
-        "rgba(34, 197, 94, 0.015)", // green
+        "rgba(150, 180, 220, 0.008)", // very subtle blue-white
+        "rgba(100, 140, 200, 0.006)", // very subtle blue
+        "rgba(180, 200, 240, 0.005)", // very subtle light blue
+        "rgba(80, 120, 180, 0.006)", // very subtle deep blue
       ];
 
       nebulaeRef.current = [];
@@ -97,29 +127,43 @@ export default function SpaceBackground() {
 
     const drawStars = (time: number) => {
       starsRef.current.forEach((star) => {
+        // Dynamic twinkle - more variation
         const twinkle = Math.sin(time * star.twinkleSpeed + star.twinkleOffset);
-        const currentOpacity = star.opacity * (0.5 + twinkle * 0.5);
+        const twinkle2 = Math.sin(time * star.twinkleSpeed * 0.7 + star.twinkleOffset * 1.3);
+        const currentOpacity = star.opacity * (0.6 + twinkle * 0.3 + twinkle2 * 0.1);
 
+        const { r, g, b } = star.color;
+
+        // Draw star core with color
         ctx.beginPath();
         ctx.arc(star.x, star.y, star.size, 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(255, 255, 255, ${currentOpacity})`;
+        ctx.fillStyle = `rgba(${r}, ${g}, ${b}, ${currentOpacity})`;
         ctx.fill();
 
-        // Add glow to brighter stars
-        if (star.size > 1.5) {
+        // Subtle soft glow - only for medium+ stars
+        if (star.size > 1) {
           ctx.beginPath();
-          ctx.arc(star.x, star.y, star.size * 2, 0, Math.PI * 2);
-          ctx.fillStyle = `rgba(255, 255, 255, ${currentOpacity * 0.2})`;
+          ctx.arc(star.x, star.y, star.size * 1.8, 0, Math.PI * 2);
+          ctx.fillStyle = `rgba(${r}, ${g}, ${b}, ${currentOpacity * 0.25})`;
+          ctx.fill();
+        }
+
+        // Very subtle outer glow for bright stars only
+        if (star.size > 2.5) {
+          ctx.beginPath();
+          ctx.arc(star.x, star.y, star.size * 2.5, 0, Math.PI * 2);
+          ctx.fillStyle = `rgba(${r}, ${g}, ${b}, ${currentOpacity * 0.12})`;
           ctx.fill();
         }
       });
     };
 
     const animate = (time: number) => {
-      ctx.fillStyle = "#050510";
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      // Clear canvas - let CSS starfield show through
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-      drawNebulae(time);
+      // Skip nebulae for cleaner starry sky
+      // drawNebulae(time);
       drawStars(time);
 
       animationRef.current = requestAnimationFrame(animate);
@@ -139,7 +183,7 @@ export default function SpaceBackground() {
     <canvas
       ref={canvasRef}
       className="fixed inset-0 -z-10"
-      style={{ background: "#050510" }}
+      style={{ background: "transparent" }}
     />
   );
 }

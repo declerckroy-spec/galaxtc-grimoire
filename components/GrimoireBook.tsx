@@ -196,11 +196,12 @@ export default function GrimoireBook() {
 
       {/* Book wrapper with 3D perspective */}
       <div className="book-wrapper">
-        <div ref={bookRef} className="grimoire-book">
+        <div ref={bookRef} className={`grimoire-book ${isOpen ? 'is-open' : ''}`}>
           {/* Front Cover */}
           <div className="page page-cover" data-density="hard">
             <div className="cover-content front-cover">
               <div className="cover-texture" />
+              <div className="cover-grid" />
 
               {/* Cobweb corners - elaborate SVG for witchy effect */}
               <svg className="cobweb cobweb-top-left" viewBox="0 0 100 100" preserveAspectRatio="none">
@@ -227,25 +228,27 @@ export default function GrimoireBook() {
                       stroke="rgba(180,170,150,0.15)" strokeWidth="0.25" fill="none"/>
               </svg>
 
-              {/* Stardust/magical particles */}
-              <div className="stardust-container">
-                {[...Array(25)].map((_, i) => (
+              {/* Burn marks and weathering spots */}
+              <div className="burn-marks-container">
+                {[...Array(8)].map((_, i) => (
                   <div
-                    key={`star-${i}`}
-                    className="stardust"
+                    key={`burn-${i}`}
+                    className="burn-mark"
                     style={{
-                      left: `${10 + Math.random() * 80}%`,
-                      top: `${10 + Math.random() * 80}%`,
-                      animationDelay: `${Math.random() * 5}s`,
-                      animationDuration: `${2 + Math.random() * 3}s`,
+                      left: `${5 + Math.random() * 90}%`,
+                      top: `${5 + Math.random() * 90}%`,
+                      width: `${20 + Math.random() * 60}px`,
+                      height: `${15 + Math.random() * 45}px`,
+                      transform: `rotate(${Math.random() * 360}deg)`,
+                      opacity: 0.15 + Math.random() * 0.25,
                     }}
                   />
                 ))}
               </div>
 
-              {/* Floating dust motes */}
+              {/* Floating dust motes - keeping subtle dust */}
               <div className="dust-motes">
-                {[...Array(40)].map((_, i) => (
+                {[...Array(20)].map((_, i) => (
                   <div
                     key={`dust-${i}`}
                     className="dust-mote"
@@ -254,40 +257,66 @@ export default function GrimoireBook() {
                       top: `${Math.random() * 100}%`,
                       animationDelay: `${Math.random() * 8}s`,
                       animationDuration: `${6 + Math.random() * 8}s`,
-                      opacity: 0.1 + Math.random() * 0.3,
-                      width: `${1 + Math.random() * 2}px`,
-                      height: `${1 + Math.random() * 2}px`,
+                      opacity: 0.08 + Math.random() * 0.15,
+                      width: `${1 + Math.random() * 1.5}px`,
+                      height: `${1 + Math.random() * 1.5}px`,
                     }}
                   />
                 ))}
               </div>
 
-              <div className="cover-corners">
-                <div className="corner top-left" />
-                <div className="corner top-right" />
-                <div className="corner bottom-left" />
-                <div className="corner bottom-right" />
+              {/* Spine studs - large brass studs along the spine edge */}
+              <div className="spine-studs">
+                {[...Array(5)].map((_, i) => (
+                  <div key={`spine-stud-${i}`} className="spine-stud" />
+                ))}
               </div>
+
+              {/* Corner studs - large decorative studs */}
+              <div className="cover-studs">
+                <div className="stud stud-top-left" />
+                <div className="stud stud-top-right" />
+                <div className="stud stud-bottom-left" />
+                <div className="stud stud-bottom-right" />
+              </div>
+
+              {/* Decorative stud border frame */}
+              <div className="stud-border">
+                {/* Top row of small studs */}
+                {[...Array(10)].map((_, i) => (
+                  <div key={`stud-top-${i}`} className="border-stud border-stud-top" style={{ left: `${12 + i * 8}%` }} />
+                ))}
+                {/* Bottom row */}
+                {[...Array(10)].map((_, i) => (
+                  <div key={`stud-bottom-${i}`} className="border-stud border-stud-bottom" style={{ left: `${12 + i * 8}%` }} />
+                ))}
+                {/* Left column */}
+                {[...Array(6)].map((_, i) => (
+                  <div key={`stud-left-${i}`} className="border-stud border-stud-left" style={{ top: `${18 + i * 12}%` }} />
+                ))}
+                {/* Right column */}
+                {[...Array(6)].map((_, i) => (
+                  <div key={`stud-right-${i}`} className="border-stud border-stud-right" style={{ top: `${18 + i * 12}%` }} />
+                ))}
+              </div>
+
               <div className="cover-border" />
 
-              {/* Mystical glow behind medallion */}
-              <div className="mystical-glow" />
 
-              <div className="cover-medallion">
-                <div className="medallion-ring" />
-                <Image
-                  src="/artwork/Galaxtc logo.png"
-                  alt="Galaxtc"
-                  width={100}
-                  height={100}
-                  className="cover-logo"
-                />
-              </div>
-              <div className="cover-title">GALAXTC</div>
-              <div className="cover-runes">
-                <span>&#x2726;</span>
-                <span>&#x2605;</span>
-                <span>&#x2726;</span>
+              {/* Crystal ball / glass orb - GOLDEN */}
+              <div className="crystal-ball">
+                <div className="crystal-ball-inner">
+                  <div className="crystal-ball-highlight" />
+                  <div className="crystal-ball-highlight-2" />
+                  <Image
+                    src="/artwork/Galaxtc logo.png"
+                    alt="Galaxtc"
+                    width={160}
+                    height={160}
+                    className="crystal-ball-logo"
+                  />
+                  <div className="crystal-ball-reflection" />
+                </div>
               </div>
               <div className="cover-spine" />
 

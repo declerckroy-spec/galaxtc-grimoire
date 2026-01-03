@@ -363,45 +363,50 @@ export default function GrimoireBook() {
                   <div className="parchment-page combined-page">
                     <div className="parchment-texture" />
                     <div className="page-aging-overlay" />
-                    <CornerOrnament position="top-left" />
-                    <CornerOrnament position="top-right" />
-                    <CornerOrnament position="bottom-left" />
-                    <CornerOrnament position="bottom-right" />
 
-                    {/* Compact artwork frame for mobile */}
-                    <div className="artwork-frame mobile-frame">
-                      <div className="frame-border" />
-                      <div className="artwork-image-container">
-                        <Image
-                          src={
-                            artwork.hasBlacklight && showBlacklight[artwork.id]
-                              ? artwork.blacklightImage!
-                              : artwork.image
-                          }
-                          alt={artwork.title}
-                          fill
-                          className="artwork-image"
-                          sizes="280px"
-                          priority={index < 2}
-                        />
+                    {/* Mobile layout: scrollable content */}
+                    <div className="mobile-content-wrapper">
+                      {/* Artwork frame for mobile - larger */}
+                      <div className="artwork-frame mobile-frame">
+                        <div className="frame-border" />
+                        <div className="artwork-image-container">
+                          <Image
+                            src={
+                              artwork.hasBlacklight && showBlacklight[artwork.id]
+                                ? artwork.blacklightImage!
+                                : artwork.image
+                            }
+                            alt={artwork.title}
+                            fill
+                            className="artwork-image"
+                            sizes="320px"
+                            priority={index < 2}
+                          />
+                        </div>
                       </div>
-                      {artwork.hasBlacklight && (
-                        <button
-                          className="blacklight-toggle"
-                          onClick={() => toggleBlacklight(artwork.id)}
-                          title="Toggle blacklight view"
-                        >
-                          {showBlacklight[artwork.id] ? "☀️" : "🔮"}
-                        </button>
-                      )}
-                    </div>
 
-                    {/* Compact description for mobile */}
-                    <div className="mobile-description">
-                      <h2 className="artwork-title mobile-title">{artwork.title}</h2>
-                      <p className="technique mobile-technique">
-                        {artwork.technique}
-                      </p>
+                      {/* Full description for mobile */}
+                      <div className="mobile-description">
+                        <h2 className="artwork-title mobile-title">{artwork.title}</h2>
+                        <p className="technique mobile-technique">
+                          <span className="detail-label">Technique:</span> {artwork.technique}
+                        </p>
+                        {artwork.size && (
+                          <p className="size mobile-size">
+                            <span className="detail-label">Size:</span> {artwork.size}
+                          </p>
+                        )}
+                        <p className="artwork-description mobile-desc-text">{artwork.description}</p>
+                        {artwork.hasBlacklight && (
+                          <button
+                            className="blacklight-toggle mobile-blacklight"
+                            onClick={() => toggleBlacklight(artwork.id)}
+                            title="Toggle blacklight view"
+                          >
+                            {showBlacklight[artwork.id] ? "☀️ Normal" : "🔮 Blacklight"}
+                          </button>
+                        )}
+                      </div>
                     </div>
                     <div className="page-number">{index + 1}</div>
                   </div>

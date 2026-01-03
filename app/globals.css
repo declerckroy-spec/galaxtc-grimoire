@@ -1373,14 +1373,24 @@ body {
   flex-direction: column;
   align-items: center;
   justify-content: flex-start;
-  padding: 25px 15px 15px;
+  padding: 12px 10px 10px;
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
+}
+
+.mobile-content-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
   gap: 8px;
-  overflow: visible !important;
+  position: relative;
+  z-index: 10;
 }
 
 .mobile-frame.artwork-frame {
-  width: 60% !important;
-  max-width: 180px !important;
+  width: 70% !important;
+  max-width: 240px !important;
   aspect-ratio: 1 !important;
   margin: 0 auto;
   flex-shrink: 0;
@@ -1395,13 +1405,12 @@ body {
 
 .mobile-description {
   text-align: center;
-  padding: 8px 12px;
+  padding: 10px 12px;
   flex-shrink: 0;
-  background: rgba(180, 160, 130, 0.3);
-  border-radius: 4px;
-  margin-top: 8px;
-  width: 90%;
-  max-width: 280px;
+  background: rgba(180, 160, 130, 0.2);
+  border-radius: 6px;
+  width: 92%;
+  max-width: 300px;
   position: relative;
   z-index: 10;
 }
@@ -1410,15 +1419,36 @@ body {
   font-family: "Cinzel", serif;
   font-size: 1rem;
   color: var(--ink-dark);
-  margin: 0 0 4px;
-  line-height: 1.2;
+  margin: 0 0 6px;
+  line-height: 1.25;
 }
 
-.mobile-technique {
-  font-size: 0.8rem;
+.mobile-technique,
+.mobile-size {
+  font-size: 0.75rem;
   color: var(--ink-mid);
-  font-style: italic;
-  margin: 0;
+  margin: 2px 0;
+}
+
+.mobile-technique .detail-label,
+.mobile-size .detail-label {
+  font-weight: 600;
+  color: var(--ink-dark);
+}
+
+.mobile-desc-text {
+  font-size: 0.7rem;
+  line-height: 1.45;
+  color: var(--ink-mid);
+  margin: 6px 0 0;
+  text-align: justify;
+}
+
+.mobile-blacklight {
+  margin-top: 8px;
+  padding: 6px 14px;
+  font-size: 0.8rem;
+  display: inline-block;
 }
 
 /* ============================================

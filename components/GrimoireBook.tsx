@@ -388,16 +388,6 @@ export default function GrimoireBook() {
                             priority={index < 2}
                           />
                         </div>
-                        {/* Blacklight toggle inside frame for positioning */}
-                        {artwork.hasBlacklight && (
-                          <button
-                            className="blacklight-toggle mobile-blacklight"
-                            onClick={() => toggleBlacklight(artwork.id)}
-                            title="Toggle blacklight view"
-                          >
-                            {showBlacklight[artwork.id] ? "☀️" : "🔮"}
-                          </button>
-                        )}
                       </div>
 
                       {/* Full description for mobile */}
@@ -413,6 +403,21 @@ export default function GrimoireBook() {
                         )}
                         <p className="artwork-description mobile-desc-text">{artwork.description}</p>
                       </div>
+
+                      {/* Blacklight toggle section below description */}
+                      {artwork.hasBlacklight && (
+                        <div className="mobile-blacklight-section">
+                          <p className="blacklight-hint">
+                            This artwork transforms under UV blacklight
+                          </p>
+                          <button
+                            className="blacklight-toggle mobile-blacklight"
+                            onClick={() => toggleBlacklight(artwork.id)}
+                          >
+                            {showBlacklight[artwork.id] ? "View Normal" : "View Blacklight"}
+                          </button>
+                        </div>
+                      )}
                     </div>
                     <div className="page-number">{index + 1}</div>
                   </div>
